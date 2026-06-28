@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git init *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git remote *)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.naadanchords.com)",
+      "Bash(powershell -Command \"\\(Get-Content index.html\\) -replace 'app\\\\.js\\\\?v=20260628d', 'app.js?v=20260628e' | Set-Content index.html -Encoding utf8\")",
+      "PowerShell(\\(Get-Content \"c:\\\\Users\\\\aadit\\\\DotWav Sheets\\\\index.html\" -Raw -Encoding utf8\\) -replace 'app\\\\.js\\\\?v=20260628e', 'app.js?v=20260628f' | Set-Content \"c:\\\\Users\\\\aadit\\\\DotWav Sheets\\\\index.html\" -Encoding utf8 -NoNewline)",
+      "PowerShell(\\(Get-Content \"c:\\\\Users\\\\aadit\\\\DotWav Sheets\\\\index.html\" -Raw -Encoding utf8\\) -replace 'app\\\\.js\\\\?v=20260628f', 'app.js?v=20260628g' | Set-Content \"c:\\\\Users\\\\aadit\\\\DotWav Sheets\\\\index.html\" -Encoding utf8 -NoNewline)",
+      "PowerShell(\\(Get-Content \"c:\\\\Users\\\\aadit\\\\DotWav Sheets\\\\index.html\" -Raw -Encoding utf8\\) -replace 'app\\\\.js\\\\?v=20260628g', 'app.js?v=20260628h' | Set-Content \"c:\\\\Users\\\\aadit\\\\DotWav Sheets\\\\index.html\" -Encoding utf8 -NoNewline)",
+      "Bash(curl -s \"https://dotwav-sheets.netlify.app/\")",
+      "Bash(curl -s \"https://dotwav-sheets.netlify.app/styles.css\")",
+      "Bash(curl -s \"https://dotwav-sheets.netlify.app/app.js?v=20260628j\")",
+      "Bash(curl -s -I \"https://dotwav-sheets.netlify.app/\")",
+      "Bash(curl -s \"https://dotwav-sheets.netlify.app/sw.js\")"
+    ]
+  }
+}

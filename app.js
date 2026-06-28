@@ -2154,10 +2154,11 @@ The [Em]hour I [D]first be[G]lieved`;
     el.cardCreate.addEventListener('click', () => newSheet());
 
     // Naadan Chords import — home-screen button only
-    // Document-level delegation catches the click regardless of cached HTML or SW state
-    document.addEventListener('click', e => {
-      if (e.target.closest('#card-naadan-import')) openNaadanModal();
-    });
+    if (el.cardNaadan) {
+      el.cardNaadan.addEventListener('click', (e) => {
+        openNaadanModal();
+      });
+    }
     if (el.naadanModal) {
       el.naadanModal.addEventListener('click', e => { if (e.target === el.naadanModal) closeNaadanModal(); });
       safeBind('#btn-naadan-close', 'click', closeNaadanModal);
