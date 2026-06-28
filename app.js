@@ -1916,6 +1916,8 @@ The [Em]hour I [D]first be[G]lieved`;
     requestAnimationFrame(() => el.naadanSearch.focus());
   }
   // Expose globally so the HTML onclick attribute can reach it
+  window.__openNaadanModal = openNaadanModal;
+
   function closeNaadanModal() {
     el.naadanModal.classList.remove('open');
     clearTimeout(naadanSearchTimeout);
@@ -2151,12 +2153,10 @@ The [Em]hour I [D]first be[G]lieved`;
     el.cardCreate.addEventListener('click', () => newSheet());
 
     // Naadan Chords import — home-screen button only
-    if (el.cardNaadan) {
-      el.cardNaadan.addEventListener('click', e => {
-        e.stopPropagation();
-        openNaadanModal();
-      });
-    }
+    // Document-level delegation catches the click regardless of cached HTML or SW state
+    document.addEventListener('click', e => {
+      if (e.target.closest('#card-naadan-import')) openNaadanModal();
+    });
     if (el.naadanModal) {
       el.naadanModal.addEventListener('click', e => { if (e.target === el.naadanModal) closeNaadanModal(); });
       safeBind('#btn-naadan-close', 'click', closeNaadanModal);
