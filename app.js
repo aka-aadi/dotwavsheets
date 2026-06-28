@@ -1010,7 +1010,7 @@
   }
 
   function newSheet() {
-    if (el.naadanModal) el.naadanModal.classList.remove('open');
+    if (el.naadanModal) { el.naadanModal.style.cssText = ''; el.naadanModal.classList.remove('open'); }
     currentSongId = null;
     song = { title: '', artist: '', key: 'C', keyMode: 'major', tempo: 120, capo: 0, transposeAmount: 0, lines: [] };
     el.title.value = ''; el.artist.value = ''; el.key.value = 'C'; el.keyMode.value = 'major'; el.tempo.value = 120; el.capo.value = 0;
@@ -1076,7 +1076,7 @@
   // ═══════════════════════════════════════════════════════
   function showScreen(screen, pushState = true) {
     currentScreen = screen;
-    if (el.naadanModal) el.naadanModal.classList.remove('open');
+    if (el.naadanModal) { el.naadanModal.style.cssText = ''; el.naadanModal.classList.remove('open'); }
     el.homeScreen.classList.toggle('hidden', screen !== 'home');
     el.editorScreen.classList.toggle('hidden', screen !== 'editor');
     el.setlistScreen.classList.toggle('hidden', screen !== 'setlist');
@@ -1523,7 +1523,7 @@
   }
 
   async function loadSong(id, data) {
-    if (el.naadanModal) el.naadanModal.classList.remove('open');
+    if (el.naadanModal) { el.naadanModal.style.cssText = ''; el.naadanModal.classList.remove('open'); }
     currentSongId = id;
     song = data;
     restoreUi();
@@ -1919,6 +1919,7 @@ The [Em]hour I [D]first be[G]lieved`;
   window.__openNaadanModal = openNaadanModal;
 
   function closeNaadanModal() {
+    el.naadanModal.style.cssText = '';
     el.naadanModal.classList.remove('open');
     clearTimeout(naadanSearchTimeout);
   }
