@@ -476,16 +476,14 @@ That saved a wretch like me"></textarea>
 
   <div id="sidebar-overlay" class="sidebar-overlay"></div>
   <div class="toast-container" id="toast-container"></div>
-  <script src="app.js?v=20260628i"></script>
+  <script src="app.js?v=20260628j"></script>
   <script>
-    // Self-contained Naadan modal — works regardless of IIFE/cache state
     (function() {
-      var btn     = document.getElementById('card-naadan-import');
       var modal   = document.getElementById('naadan-modal');
       var search  = document.getElementById('naadan-search');
       var results = document.getElementById('naadan-results');
       var closeBtn= document.getElementById('btn-naadan-close');
-      if (!btn || !modal) return;
+      if (!modal) return;
 
       var PLACEHOLDER = '<div class="naadan-placeholder"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search for a song to import</span></div>';
 
@@ -496,14 +494,22 @@ That saved a wretch like me"></textarea>
       }
       function closeModal() { modal.classList.remove('open'); }
 
-      btn.addEventListener('click', function(e) { e.stopPropagation(); openModal(); });
+      // Capture-phase listener at document root — fires before any other handler,
+      // cannot be blocked by stopPropagation anywhere in the tree
+      document.addEventListener('click', function(e) {
+        var t = e.target;
+        while (t && t !== document) {
+          if (t.id === 'card-naadan-import') { openModal(); return; }
+          t = t.parentNode;
+        }
+      }, true); // true = capture phase
+
       if (closeBtn) closeBtn.addEventListener('click', closeModal);
       modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); });
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
       });
 
-      // Override app.js's global so both paths call this same function
       window.__openNaadanModal = openModal;
     })();
   </script>
