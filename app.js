@@ -323,11 +323,12 @@
   }
 
   // ═══════════════════════════════════════════════════════
-  // INLINE LYRIC / SECTION EDITING (double-click)
+  // INLINE LYRIC / SECTION EDITING (single-click)
   // ═══════════════════════════════════════════════════════
-  function onLyricDblClick(e) {
+  function onLyricClick(e) {
     const lyricEl = e.target.closest('.lyric-text');
     if (!lyricEl) return;
+    if (lyricEl.querySelector('.lyric-edit-input')) return; // already editing
     const idx = parseInt(lyricEl.dataset.idx);
     cursorIdx = idx;
     const line = song.lines[idx];
@@ -339,22 +340,79 @@
     lyricEl.textContent = '';
     lyricEl.appendChild(input);
     input.focus();
-    input.select();
+    input.setSelectionRange(input.value.length, input.value.length);
 
-    const finish = (save_) => {
-      if (save_) { line.text = input.value; save(); }
+    let finishing = false;
+    const finish = (saveIt) => {
+      if (finishing) return;
+      finishing = true;
+      if (saveIt) { line.text = input.value; save(); }
       renderEditor();
     };
+
     input.addEventListener('blur', () => finish(true));
     input.addEventListener('keydown', ev => {
-      if (ev.key === 'Enter') { ev.preventDefault(); finish(true); }
-      if (ev.key === 'Escape') finish(false);
+      if (ev.key === 'Enter') {
+        ev.preventDefault();
+        const text = input.value;
+        line.text = text;
+        finishing = true; // prevent blur from double-saving
+        song.lines.splice(idx + 1, 0, { type: 'lyric', text: '', chords: [] });
+        cursorIdx = idx + 1;
+        save();
+        renderEditor();
+        // Immediately focus the new empty line
+        requestAnimationFrame(() => {
+          const nextLyric = document.querySelector(`.lyric-text[data-idx="${idx + 1}"]`);
+          if (nextLyric) nextLyric.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        });
+      } else if (ev.key === 'Backspace' && input.value === '') {
+        ev.preventDefault();
+        finishing = true;
+        song.lines.splice(idx, 1);
+        const prevIdx = Math.max(0, idx - 1);
+        cursorIdx = prevIdx;
+        save();
+        renderEditor();
+        requestAnimationFrame(() => {
+          const prevLine = song.lines[prevIdx];
+          if (prevLine && prevLine.type === 'lyric') {
+            const prevLyric = document.querySelector(`.lyric-text[data-idx="${prevIdx}"]`);
+            if (prevLyric) {
+              prevLyric.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+              requestAnimationFrame(() => {
+                const inp = prevLyric.querySelector('.lyric-edit-input');
+                if (inp) inp.setSelectionRange(inp.value.length, inp.value.length);
+              });
+            }
+          }
+        });
+      } else if (ev.key === 'Tab') {
+        ev.preventDefault();
+        line.text = input.value;
+        finishing = true;
+        save();
+        const nextIdx = ev.shiftKey ? idx - 1 : idx + 1;
+        renderEditor();
+        if (nextIdx >= 0 && nextIdx < song.lines.length) {
+          requestAnimationFrame(() => {
+            const nextLine = song.lines[nextIdx];
+            if (nextLine && nextLine.type === 'lyric') {
+              const nextLyric = document.querySelector(`.lyric-text[data-idx="${nextIdx}"]`);
+              if (nextLyric) nextLyric.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            }
+          });
+        }
+      } else if (ev.key === 'Escape') {
+        finish(false);
+      }
     });
   }
 
-  function onSectionDblClick(e) {
+  function onSectionClick(e) {
     const secEl = e.target.closest('.section-label');
     if (!secEl) return;
+    if (secEl.querySelector('.section-edit-input')) return; // already editing
     const idx = parseInt(secEl.dataset.idx);
     cursorIdx = idx;
     const line = song.lines[idx];
@@ -368,14 +426,26 @@
     input.focus();
     input.select();
 
-    const finish = (save_) => {
-      if (save_) { line.text = input.value; save(); }
+    let finishing = false;
+    const finish = (saveIt) => {
+      if (finishing) return;
+      finishing = true;
+      if (saveIt && input.value.trim()) { line.text = input.value.trim(); save(); }
+      else if (saveIt && !input.value.trim()) {
+        // Remove the section if name left blank
+        song.lines.splice(idx, 1);
+        save();
+      }
       renderEditor();
     };
     input.addEventListener('blur', () => finish(true));
     input.addEventListener('keydown', ev => {
       if (ev.key === 'Enter') { ev.preventDefault(); finish(true); }
       if (ev.key === 'Escape') finish(false);
+      if (ev.key === 'Tab') {
+        ev.preventDefault();
+        finish(true);
+      }
     });
   }
 
@@ -393,26 +463,26 @@
 
   function addLine() {
     const insertAt = getInsertPosition();
-    toast('Add line triggered', 'info');
     song.lines.splice(insertAt, 0, { type: 'lyric', text: '', chords: [] });
     cursorIdx = insertAt;
     renderEditor();
     save();
-    // Auto-trigger editing
-    const newLyric = document.querySelector(`.lyric-text[data-idx="${insertAt}"]`);
-    if (newLyric) newLyric.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
+    requestAnimationFrame(() => {
+      const newLyric = document.querySelector(`.lyric-text[data-idx="${insertAt}"]`);
+      if (newLyric) newLyric.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    });
   }
 
   function addSection() {
-    const name = prompt('Section name (e.g. Verse 1, Chorus):');
-    toast('Add section triggered', 'info');
-    if (name && name.trim()) {
-      const insertAt = getInsertPosition();
-      song.lines.splice(insertAt, 0, { type: 'section', text: name.trim(), chords: [] });
-      cursorIdx = insertAt;
-      renderEditor();
-      save();
-    }
+    const insertAt = getInsertPosition();
+    song.lines.splice(insertAt, 0, { type: 'section', text: 'Section', chords: [] });
+    cursorIdx = insertAt;
+    renderEditor();
+    save();
+    requestAnimationFrame(() => {
+      const secEl = document.querySelector(`.section-label[data-idx="${insertAt}"]`);
+      if (secEl) secEl.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    });
   }
 
   function getInsertPosition() {
@@ -1817,10 +1887,8 @@ The [Em]hour I [D]first be[G]lieved`;
       onGripClick(e);
       onChordLaneClick(e);
       onDeleteLine(e);
-    });
-    el.editorContent.addEventListener('dblclick', e => {
-      onLyricDblClick(e);
-      onSectionDblClick(e);
+      onLyricClick(e);
+      onSectionClick(e);
     });
 
     // Drag and drop
@@ -2049,6 +2117,13 @@ The [Em]hour I [D]first be[G]lieved`;
       if (e.ctrlKey && e.key === 'ArrowDown') { e.preventDefault(); transposeAll(-1); }
       if (e.ctrlKey && e.key === 'p') { e.preventDefault(); switchTab(activeTab === 'edit' ? 'preview' : 'edit'); }
       if (e.ctrlKey && e.key === 'e') { e.preventDefault(); exportPdf(); }
+      // Enter adds a new line when in the editor with no text field focused
+      if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey && !e.shiftKey
+          && currentScreen === 'editor' && activeTab === 'edit'
+          && !['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) {
+        e.preventDefault();
+        addLine();
+      }
     });
 
     // PWA Install
@@ -2132,7 +2207,6 @@ The [Em]hour I [D]first be[G]lieved`;
         .catch(err => console.error('Service Worker Registry Failed', err));
     }
 
-    toast('Init complete', 'success');
   }
 
   async function triggerRefresh() {
