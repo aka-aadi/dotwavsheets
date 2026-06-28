@@ -1809,17 +1809,6 @@ The [Em]hour I [D]first be[G]lieved`;
     }
   }
 
-  // Swipe handling
-  let touchStartX = 0;
-  function handleTouchStart(e) { touchStartX = e.changedTouches[0].screenX; }
-  function handleTouchEnd(e) {
-    const touchEndX = e.changedTouches[0].screenX;
-    const diff = touchStartX - touchEndX;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) nextPerfSong();
-      else prevPerfSong();
-    }
-  }
 
   // Auto-scroll logic for Performance Mode
   let perfScrollActive = false;
@@ -2236,8 +2225,6 @@ The [Em]hour I [D]first be[G]lieved`;
     safeBind('#perf-scroll-toggle', 'click', toggleAutoScroll);
     safeBind('#btn-perf-fullscreen', 'click', toggleFullscreen);
 
-    el.performanceScreen.addEventListener('touchstart', handleTouchStart, false);
-    el.performanceScreen.addEventListener('touchend', handleTouchEnd, false);
 
     // Search
     safeBind('#btn-import', 'click', openImportModal);
