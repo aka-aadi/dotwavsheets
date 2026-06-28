@@ -545,7 +545,19 @@ body {
 .naadan-import-arrow { color:var(--text-muted); flex-shrink:0; transition:transform 0.15s }
 .naadan-result-item:hover .naadan-import-arrow { transform:translateX(3px); color:var(--accent-primary) }
 
-.naadan-card .create-icon svg { stroke:var(--accent-primary) }
+.create-card-import-btn {
+  display:flex; align-items:center; gap:6px;
+  margin-top:4px; padding:6px 12px;
+  background:rgba(124,91,245,0.08); border:1px solid rgba(124,91,245,0.2);
+  border-radius:20px; color:var(--accent-primary);
+  font-size:0.72rem; font-weight:600; cursor:pointer;
+  transition:all 0.18s; white-space:nowrap;
+}
+.create-card-import-btn:hover {
+  background:rgba(124,91,245,0.18); border-color:rgba(124,91,245,0.45);
+  transform:translateY(-1px);
+}
+.create-card-import-btn svg { flex-shrink:0; opacity:0.9 }
 
 /* ─── MODAL FORM GROUPS ─── */
 .modal .form-group { margin-bottom:18px }
