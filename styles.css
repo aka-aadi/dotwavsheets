@@ -393,11 +393,7 @@ body {
   background:var(--bg-secondary); border-top:1px solid var(--border); flex-shrink:0;
 }
 .footer-brand { display:flex; align-items:center }
-.footer-logo {
-  font-size:0.78rem; font-weight:700; letter-spacing:-0.02em;
-  color:var(--text-primary);
-}
-.footer-logo span { color:var(--text-muted); font-weight:400 }
+.footer-logo-img { height:18px; width:auto; opacity:0.85; display:block }
 #save-status { color:var(--accent-chord); font-weight:500 }
 .footer-save-status.hidden { display:none }
 .footer-naadan {
@@ -546,19 +542,24 @@ body {
 .naadan-import-arrow { color:var(--text-muted); flex-shrink:0; transition:transform 0.15s }
 .naadan-result-item:hover .naadan-import-arrow { transform:translateX(3px); color:var(--accent-primary) }
 
-.create-card-import-btn {
-  display:flex; align-items:center; gap:6px;
-  margin-top:4px; padding:6px 12px;
-  background:rgba(124,91,245,0.08); border:1px solid rgba(124,91,245,0.2);
+/* Songs actions bar above the grid */
+.songs-actions-bar {
+  display:flex; justify-content:flex-end; align-items:center;
+  margin-bottom:10px; padding:0 2px;
+}
+.naadan-import-trigger {
+  display:flex; align-items:center; gap:7px;
+  padding:7px 16px;
+  background:rgba(124,91,245,0.08); border:1px solid rgba(124,91,245,0.22);
   border-radius:20px; color:var(--accent-primary);
-  font-size:0.72rem; font-weight:600; cursor:pointer;
+  font-size:0.8rem; font-weight:600; cursor:pointer;
   transition:all 0.18s; white-space:nowrap;
 }
-.create-card-import-btn:hover {
-  background:rgba(124,91,245,0.18); border-color:rgba(124,91,245,0.45);
+.naadan-import-trigger:hover {
+  background:rgba(124,91,245,0.16); border-color:rgba(124,91,245,0.45);
   transform:translateY(-1px);
 }
-.create-card-import-btn svg { flex-shrink:0; opacity:0.9 }
+.naadan-import-trigger svg { flex-shrink:0 }
 
 /* ─── MODAL FORM GROUPS ─── */
 .modal .form-group { margin-bottom:18px }

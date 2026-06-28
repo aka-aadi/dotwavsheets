@@ -2146,8 +2146,8 @@ The [Em]hour I [D]first be[G]lieved`;
     });
     el.cardCreate.addEventListener('click', () => newSheet());
 
-    // Naadan Chords import (button sits inside card-create, so stop propagation)
-    if (el.cardNaadan) el.cardNaadan.addEventListener('click', e => { e.stopPropagation(); openNaadanModal(); });
+    // Naadan Chords import
+    if (el.cardNaadan) el.cardNaadan.addEventListener('click', () => openNaadanModal());
     if (el.naadanModal) {
       el.naadanModal.addEventListener('click', e => { if (e.target === el.naadanModal) closeNaadanModal(); });
       safeBind('#btn-naadan-close', 'click', closeNaadanModal);
