@@ -1075,6 +1075,7 @@
   // ═══════════════════════════════════════════════════════
   function showScreen(screen, pushState = true) {
     currentScreen = screen;
+    if (el.naadanModal) el.naadanModal.classList.remove('open');
     el.homeScreen.classList.toggle('hidden', screen !== 'home');
     el.editorScreen.classList.toggle('hidden', screen !== 'editor');
     el.setlistScreen.classList.toggle('hidden', screen !== 'setlist');

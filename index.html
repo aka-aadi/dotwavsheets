@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>DotWav Sheets — Chord Sheet Creator for Musicians</title>
+  <title>DotWav Sheets â€” Chord Sheet Creator for Musicians</title>
   <meta name="description" content="Create professional chord sheets with lyrics and chords. Click to place chords above lyrics, transpose, and export to PDF.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -131,7 +131,7 @@
       </div>
       <div class="perf-controls">
         <div class="perf-control-group">
-          <button class="btn btn-ghost btn-sm" id="btn-perf-tempo-down">−</button>
+          <button class="btn btn-ghost btn-sm" id="btn-perf-tempo-down">âˆ’</button>
           <div class="perf-val-wrap">
             <span id="perf-tempo-val" class="perf-val">120</span>
             <span class="perf-unit">BPM</span>
@@ -140,7 +140,7 @@
         </div>
 
         <div class="perf-control-group">
-          <button class="btn btn-ghost btn-sm" id="btn-perf-transpose-down">−1</button>
+          <button class="btn btn-ghost btn-sm" id="btn-perf-transpose-down">âˆ’1</button>
           <span id="perf-transpose-val" class="transpose-value">0</span>
           <button class="btn btn-ghost btn-sm" id="btn-perf-transpose-up">+1</button>
         </div>
@@ -280,7 +280,7 @@
       <div class="editor-toolbar">
         <div class="toolbar-left">
           <span class="toolbar-label">Chord Sheet Editor</span>
-          <span class="toolbar-hint">Click lyric to edit · Click above lyric to add chord · Drag ⋮⋮ to reorder</span>
+          <span class="toolbar-hint">Click lyric to edit Â· Click above lyric to add chord Â· Drag â‹®â‹® to reorder</span>
         </div>
         <div class="toolbar-right">
           <button class="btn btn-ghost btn-sm" id="btn-import">
@@ -301,10 +301,10 @@
       <div class="selection-bar" id="selection-bar">
         <span class="sel-count" id="sel-count">0 selected</span>
         <div class="sel-actions">
-          <button class="btn btn-sm btn-ghost" id="btn-sel-up" title="Move Up">↑ Move Up</button>
-          <button class="btn btn-sm btn-ghost" id="btn-sel-down" title="Move Down">↓ Move Down</button>
-          <button class="btn btn-sm btn-ghost" id="btn-sel-dup" title="Duplicate">⧉ Duplicate</button>
-          <button class="btn btn-sm btn-ghost btn-danger-ghost" id="btn-sel-del" title="Delete Selected">✕ Delete</button>
+          <button class="btn btn-sm btn-ghost" id="btn-sel-up" title="Move Up">â†‘ Move Up</button>
+          <button class="btn btn-sm btn-ghost" id="btn-sel-down" title="Move Down">â†“ Move Down</button>
+          <button class="btn btn-sm btn-ghost" id="btn-sel-dup" title="Duplicate">â§‰ Duplicate</button>
+          <button class="btn btn-sm btn-ghost btn-danger-ghost" id="btn-sel-del" title="Delete Selected">âœ• Delete</button>
         </div>
         <button class="btn btn-sm btn-ghost" id="btn-sel-clear">Clear</button>
       </div>
@@ -336,7 +336,7 @@
         <div class="form-group"><label for="input-artist">Artist</label><input type="text" id="input-artist" placeholder="Artist / Band" autocomplete="off"></div>
         <div class="form-row">
           <div class="form-group"><label for="key-select">Key</label>
-            <select id="key-select"><option value="C">C</option><option value="C#">C♯ / D♭</option><option value="D">D</option><option value="D#">D♯ / E♭</option><option value="E">E</option><option value="F">F</option><option value="F#">F♯ / G♭</option><option value="G">G</option><option value="G#">G♯ / A♭</option><option value="A">A</option><option value="A#">A♯ / B♭</option><option value="B">B</option></select>
+            <select id="key-select"><option value="C">C</option><option value="C#">Câ™¯ / Dâ™­</option><option value="D">D</option><option value="D#">Dâ™¯ / Eâ™­</option><option value="E">E</option><option value="F">F</option><option value="F#">Fâ™¯ / Gâ™­</option><option value="G">G</option><option value="G#">Gâ™¯ / Aâ™­</option><option value="A">A</option><option value="A#">Aâ™¯ / Bâ™­</option><option value="B">B</option></select>
           </div>
           <div class="form-group"><label for="key-mode">Mode</label>
             <select id="key-mode"><option value="major">Major</option><option value="minor">Minor</option></select>
@@ -360,7 +360,7 @@
         <div class="transpose-controls">
           <button class="btn btn-transpose" id="btn-transpose-down">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-            <span>− 1 Semitone</span>
+            <span>âˆ’ 1 Semitone</span>
           </button>
           <div class="transpose-display"><span class="transpose-label">Transposed</span><span class="transpose-value" id="transpose-value">0</span></div>
           <button class="btn btn-transpose" id="btn-transpose-up">
@@ -400,8 +400,8 @@
           Shortcuts
         </h3>
         <ul class="shortcut-list">
-          <li><kbd>Ctrl</kbd>+<kbd>↑</kbd> <span>Transpose Up</span></li>
-          <li><kbd>Ctrl</kbd>+<kbd>↓</kbd> <span>Transpose Down</span></li>
+          <li><kbd>Ctrl</kbd>+<kbd>â†‘</kbd> <span>Transpose Up</span></li>
+          <li><kbd>Ctrl</kbd>+<kbd>â†“</kbd> <span>Transpose Down</span></li>
           <li><kbd>Ctrl</kbd>+<kbd>P</kbd> <span>Toggle Preview</span></li>
           <li><kbd>Ctrl</kbd>+<kbd>E</kbd> <span>Export PDF</span></li>
         </ul>
@@ -471,16 +471,16 @@ That saved a wretch like me"></textarea>
     <span id="save-status" class="footer-save-status hidden">Auto-saved</span>
     <a class="footer-naadan" href="https://naadanchords.com" target="_blank" rel="noopener">
       <span class="footer-powered">powered by</span>
-      <img src="https://naadanchords.com/favicon.ico" width="14" height="14" alt="" class="naadan-favicon" onerror="this.replaceWith('♩')">
+      <img src="https://naadanchords.com/favicon.ico" width="14" height="14" alt="" class="naadan-favicon" onerror="this.replaceWith('â™©')">
       <span class="footer-naadan-name">Naadan Chords</span>
     </a>
   </footer>
 
   <div id="sidebar-overlay" class="sidebar-overlay"></div>
   <div class="toast-container" id="toast-container"></div>
-  <script src="app.js?v=20260628d"></script>
+  <script src="app.js?v=20260628e"></script>
   <script>
-    // Self-contained Naadan modal wiring — open + ALL close paths
+    // Self-contained Naadan modal wiring â€” open + ALL close paths
     (function() {
       var btn   = document.getElementById('card-naadan-import');
       var modal = document.getElementById('naadan-modal');
@@ -500,15 +500,15 @@ That saved a wretch like me"></textarea>
       // Open
       btn.onclick = function(e) { e.stopPropagation(); openModal(); };
 
-      // Close — X button
+      // Close â€” X button
       if (xBtn) xBtn.onclick = closeModal;
 
-      // Close — backdrop click
+      // Close â€” backdrop click
       modal.addEventListener('click', function(e) {
         if (e.target === modal) closeModal();
       });
 
-      // Close — Escape key
+      // Close â€” Escape key
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
       });
