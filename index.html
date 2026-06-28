@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>DotWav Sheets â€” Chord Sheet Creator for Musicians</title>
+  <title>DotWav Sheets &mdash; Chord Sheet Creator for Musicians</title>
   <meta name="description" content="Create professional chord sheets with lyrics and chords. Click to place chords above lyrics, transpose, and export to PDF.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -129,7 +129,7 @@
       </div>
       <div class="perf-controls">
         <div class="perf-control-group">
-          <button class="btn btn-ghost btn-sm" id="btn-perf-tempo-down">âˆ’</button>
+          <button class="btn btn-ghost btn-sm" id="btn-perf-tempo-down">&minus;</button>
           <div class="perf-val-wrap">
             <span id="perf-tempo-val" class="perf-val">120</span>
             <span class="perf-unit">BPM</span>
@@ -138,7 +138,7 @@
         </div>
 
         <div class="perf-control-group">
-          <button class="btn btn-ghost btn-sm" id="btn-perf-transpose-down">âˆ’1</button>
+          <button class="btn btn-ghost btn-sm" id="btn-perf-transpose-down">&minus;1</button>
           <span id="perf-transpose-val" class="transpose-value">0</span>
           <button class="btn btn-ghost btn-sm" id="btn-perf-transpose-up">+1</button>
         </div>
@@ -278,7 +278,7 @@
       <div class="editor-toolbar">
         <div class="toolbar-left">
           <span class="toolbar-label">Chord Sheet Editor</span>
-          <span class="toolbar-hint">Click lyric to edit Â· Click above lyric to add chord Â· Drag â‹®â‹® to reorder</span>
+          <span class="toolbar-hint">Click lyric to edit &middot; Click above lyric to add chord &middot; Drag &#8942;&#8942; to reorder</span>
         </div>
         <div class="toolbar-right">
           <button class="btn btn-ghost btn-sm" id="btn-import">
@@ -299,10 +299,10 @@
       <div class="selection-bar" id="selection-bar">
         <span class="sel-count" id="sel-count">0 selected</span>
         <div class="sel-actions">
-          <button class="btn btn-sm btn-ghost" id="btn-sel-up" title="Move Up">â†‘ Move Up</button>
-          <button class="btn btn-sm btn-ghost" id="btn-sel-down" title="Move Down">â†“ Move Down</button>
-          <button class="btn btn-sm btn-ghost" id="btn-sel-dup" title="Duplicate">â§‰ Duplicate</button>
-          <button class="btn btn-sm btn-ghost btn-danger-ghost" id="btn-sel-del" title="Delete Selected">âœ• Delete</button>
+          <button class=”btn btn-sm btn-ghost” id=”btn-sel-up” title=”Move Up”>&uarr; Move Up</button>
+          <button class=”btn btn-sm btn-ghost” id=”btn-sel-down” title=”Move Down”>&darr; Move Down</button>
+          <button class=”btn btn-sm btn-ghost” id=”btn-sel-dup” title=”Duplicate”>&#10697; Duplicate</button>
+          <button class=”btn btn-sm btn-ghost btn-danger-ghost” id=”btn-sel-del” title=”Delete Selected”>&times; Delete</button>
         </div>
         <button class="btn btn-sm btn-ghost" id="btn-sel-clear">Clear</button>
       </div>
@@ -334,7 +334,7 @@
         <div class="form-group"><label for="input-artist">Artist</label><input type="text" id="input-artist" placeholder="Artist / Band" autocomplete="off"></div>
         <div class="form-row">
           <div class="form-group"><label for="key-select">Key</label>
-            <select id="key-select"><option value="C">C</option><option value="C#">Câ™¯ / Dâ™­</option><option value="D">D</option><option value="D#">Dâ™¯ / Eâ™­</option><option value="E">E</option><option value="F">F</option><option value="F#">Fâ™¯ / Gâ™­</option><option value="G">G</option><option value="G#">Gâ™¯ / Aâ™­</option><option value="A">A</option><option value="A#">Aâ™¯ / Bâ™­</option><option value="B">B</option></select>
+            <select id="key-select"><option value="C">C</option><option value="C#">C&#9839; / D&#9837;</option><option value="D">D</option><option value="D#">D&#9839; / E&#9837;</option><option value="E">E</option><option value="F">F</option><option value="F#">F&#9839; / G&#9837;</option><option value="G">G</option><option value="G#">G&#9839; / A&#9837;</option><option value="A">A</option><option value="A#">A&#9839; / B&#9837;</option><option value="B">B</option></select>
           </div>
           <div class="form-group"><label for="key-mode">Mode</label>
             <select id="key-mode"><option value="major">Major</option><option value="minor">Minor</option></select>
@@ -398,8 +398,8 @@
           Shortcuts
         </h3>
         <ul class="shortcut-list">
-          <li><kbd>Ctrl</kbd>+<kbd>â†‘</kbd> <span>Transpose Up</span></li>
-          <li><kbd>Ctrl</kbd>+<kbd>â†“</kbd> <span>Transpose Down</span></li>
+          <li><kbd>Ctrl</kbd>+<kbd>&uarr;</kbd> <span>Transpose Up</span></li>
+          <li><kbd>Ctrl</kbd>+<kbd>&darr;</kbd> <span>Transpose Down</span></li>
           <li><kbd>Ctrl</kbd>+<kbd>P</kbd> <span>Toggle Preview</span></li>
           <li><kbd>Ctrl</kbd>+<kbd>E</kbd> <span>Export PDF</span></li>
         </ul>
@@ -470,7 +470,7 @@ That saved a wretch like me"></textarea>
     <span id="save-status" class="footer-save-status hidden">Auto-saved</span>
     <a class="footer-naadan" href="https://naadanchords.com" target="_blank" rel="noopener">
       <span class="footer-powered">powered by</span>
-      <img src="https://naadanchords.com/favicon.ico" width="14" height="14" alt="" class="naadan-favicon" onerror="this.replaceWith('â™©')">
+      <img src="https://naadanchords.com/favicon.ico" width="14" height="14" alt="" class="naadan-favicon" onerror="this.replaceWith('&#9835;')">
       <span class="footer-naadan-name">Naadan Chords</span>
     </a>
   </footer>
