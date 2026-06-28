@@ -1089,9 +1089,9 @@ input:checked ~ .toggle-label { color:var(--text-primary) }
     height:auto; min-height:62px;
     padding:8px 12px; flex-direction:column; gap:6px;
   }
-  .perf-header-left { width:100%; justify-content:center; position:relative; height:26px }
-  #btn-perf-close { position:absolute; left:-8px; top:-4px; padding:8px }
-  #btn-perf-fullscreen { position:absolute; left:32px; top:-4px; padding:8px }
+  .perf-header-left { width:100%; justify-content:flex-start; gap:4px }
+  #btn-perf-close { padding:8px }
+  #btn-perf-fullscreen { padding:8px }
   .perf-title-wrap { width:100%; order:-1; flex:none; margin-bottom:2px }
   .perf-title-wrap h2 { font-size:0.95rem }
   .perf-controls { width:100%; justify-content:center; gap:6px; flex-wrap:wrap; flex:none }
