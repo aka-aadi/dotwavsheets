@@ -1,0 +1,23 @@
+{
+  "name": "DotWav Sheets",
+  "short_name": "DotWav",
+  "description": "Professional chord sheet creator for musicians. Create, transpose, and export chord sheets with ease.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#08080d",
+  "theme_color": "#08080d",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
