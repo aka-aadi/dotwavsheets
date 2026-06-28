@@ -2162,6 +2162,13 @@ The [Em]hour I [D]first be[G]lieved`;
     // Share
     safeBind('#btn-share', 'click', shareSong);
 
+    // Manual save
+    safeBind('#btn-save-now', 'click', () => {
+      save();
+      syncToCloud();
+      toast('Saved!', 'success');
+    });
+
     // New & Home
     safeBind('#btn-new', 'click', () => newSheet());
     el.btnBackHome.addEventListener('click', () => {
