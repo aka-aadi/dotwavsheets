@@ -2153,12 +2153,7 @@ The [Em]hour I [D]first be[G]lieved`;
     });
     el.cardCreate.addEventListener('click', () => newSheet());
 
-    // Naadan Chords import — home-screen button only
-    if (el.cardNaadan) {
-      el.cardNaadan.addEventListener('click', (e) => {
-        openNaadanModal();
-      });
-    }
+    // Naadan Chords import — home-screen button only handled via inline onclick
     if (el.naadanModal) {
       el.naadanModal.addEventListener('click', e => { if (e.target === el.naadanModal) closeNaadanModal(); });
       safeBind('#btn-naadan-close', 'click', closeNaadanModal);
