@@ -2050,7 +2050,7 @@ The [Em]hour I [D]first be[G]lieved`;
     </div>`;
 
     try {
-      const resp = await fetch(`${NAADAN_API}?search=${encodeURIComponent(query)}`);
+      const resp = await fetch(`${NAADAN_API}?s=${encodeURIComponent(query)}`);
       if (!resp.ok) throw new Error(resp.statusText);
       const data = await resp.json();
       renderNaadanResults(data.Items || []);
