@@ -46,7 +46,7 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               <input type="text" id="home-search" placeholder="Search songs or artists..." autocomplete="off">
             </div>
-            <button class="naadan-import-trigger" id="card-naadan-import">
+            <button class="naadan-import-trigger" id="card-naadan-import" onclick="var m=document.getElementById('naadan-modal');m.classList.add('open');var s=document.getElementById('naadan-search');if(s){s.value='';s.focus();}">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               Import from Naadan Chords
             </button>
@@ -440,14 +440,14 @@ That saved a wretch like me"></textarea>
   </div> <!-- #editor-screen -->
 
   <!-- NAADAN CHORDS IMPORT MODAL -->
-  <div class="modal-overlay" id="naadan-modal">
+  <div class="modal-overlay" id="naadan-modal" onclick="if(event.target===this)this.classList.remove('open')">
     <div class="modal modal-wide">
       <div class="modal-header">
         <div>
           <h2>Import from Naadan Chords</h2>
           <p class="modal-subtitle">naadanchords.com</p>
         </div>
-        <button class="modal-close" id="btn-naadan-close">&times;</button>
+        <button class="modal-close" id="btn-naadan-close" onclick="document.getElementById('naadan-modal').classList.remove('open')">&times;</button>
       </div>
       <div class="modal-body naadan-modal-body">
         <input type="text" id="naadan-search" class="modal-search" placeholder="Search songs, artists, albums..." autocomplete="off" spellcheck="false">
@@ -476,42 +476,11 @@ That saved a wretch like me"></textarea>
 
   <div id="sidebar-overlay" class="sidebar-overlay"></div>
   <div class="toast-container" id="toast-container"></div>
-  <script src="app.js?v=20260628j"></script>
+  <script src="app.js?v=20260628k"></script>
   <script>
-    (function() {
-      var modal   = document.getElementById('naadan-modal');
-      var search  = document.getElementById('naadan-search');
-      var results = document.getElementById('naadan-results');
-      var closeBtn= document.getElementById('btn-naadan-close');
-      if (!modal) return;
-
-      var PLACEHOLDER = '<div class="naadan-placeholder"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search for a song to import</span></div>';
-
-      function openModal() {
-        modal.classList.add('open');
-        if (search)  { search.value = ''; setTimeout(function(){ search.focus(); }, 50); }
-        if (results) results.innerHTML = PLACEHOLDER;
-      }
-      function closeModal() { modal.classList.remove('open'); }
-
-      // Capture-phase listener at document root — fires before any other handler,
-      // cannot be blocked by stopPropagation anywhere in the tree
-      document.addEventListener('click', function(e) {
-        var t = e.target;
-        while (t && t !== document) {
-          if (t.id === 'card-naadan-import') { openModal(); return; }
-          t = t.parentNode;
-        }
-      }, true); // true = capture phase
-
-      if (closeBtn) closeBtn.addEventListener('click', closeModal);
-      modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); });
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
-      });
-
-      window.__openNaadanModal = openModal;
-    })();
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') document.getElementById('naadan-modal').classList.remove('open');
+    });
   </script>
 </body>
 </html>

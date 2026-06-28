@@ -416,8 +416,6 @@ body {
   padding:16px;
 }
 .modal-overlay.open { display:flex }
-/* Naadan modal locked to home screen — CSS hard block, overrides any JS */
-#home-screen.hidden ~ #naadan-modal { display:none !important; }
 .modal {
   background:#0f0f20;
   border:1px solid rgba(255,255,255,0.09);
