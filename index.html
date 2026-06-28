@@ -41,11 +41,15 @@
       <div class="home-container">
         <div class="home-welcome">
           <h1>Your Songs</h1>
-          <div class="home-search-container">
+          <div class="home-search-row">
             <div class="search-input-wrapper">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               <input type="text" id="home-search" placeholder="Search songs or artists..." autocomplete="off">
             </div>
+            <button class="naadan-import-trigger" id="card-naadan-import">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Import from Naadan Chords
+            </button>
           </div>
         </div>
 
@@ -56,12 +60,6 @@
 
         <!-- Songs View -->
         <div id="songs-view">
-          <div class="songs-actions-bar">
-            <button class="naadan-import-trigger" id="card-naadan-import" onclick="if(window.__openNaadanModal)window.__openNaadanModal();else{var m=document.getElementById('naadan-modal');if(m)m.classList.add('open');}">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              Import from Naadan Chords
-            </button>
-          </div>
           <div class="song-grid" id="song-grid">
             <!-- New Song Card -->
             <div class="song-card create-card" id="card-create">
@@ -478,6 +476,36 @@ That saved a wretch like me"></textarea>
 
   <div id="sidebar-overlay" class="sidebar-overlay"></div>
   <div class="toast-container" id="toast-container"></div>
-  <script src="app.js?v=20260628h"></script>
+  <script src="app.js?v=20260628i"></script>
+  <script>
+    // Self-contained Naadan modal — works regardless of IIFE/cache state
+    (function() {
+      var btn     = document.getElementById('card-naadan-import');
+      var modal   = document.getElementById('naadan-modal');
+      var search  = document.getElementById('naadan-search');
+      var results = document.getElementById('naadan-results');
+      var closeBtn= document.getElementById('btn-naadan-close');
+      if (!btn || !modal) return;
+
+      var PLACEHOLDER = '<div class="naadan-placeholder"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search for a song to import</span></div>';
+
+      function openModal() {
+        modal.classList.add('open');
+        if (search)  { search.value = ''; setTimeout(function(){ search.focus(); }, 50); }
+        if (results) results.innerHTML = PLACEHOLDER;
+      }
+      function closeModal() { modal.classList.remove('open'); }
+
+      btn.addEventListener('click', function(e) { e.stopPropagation(); openModal(); });
+      if (closeBtn) closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+      });
+
+      // Override app.js's global so both paths call this same function
+      window.__openNaadanModal = openModal;
+    })();
+  </script>
 </body>
 </html>
