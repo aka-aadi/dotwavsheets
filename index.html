@@ -19,7 +19,7 @@
   <link rel="apple-touch-icon" href="logo.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20260628m">
 </head>
 <body>
   <!-- HOME SCREEN -->
@@ -46,7 +46,7 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               <input type="text" id="home-search" placeholder="Search songs or artists..." autocomplete="off">
             </div>
-            <button class="naadan-import-trigger" id="card-naadan-import" onclick="var m=document.getElementById('naadan-modal');m.classList.add('open');var s=document.getElementById('naadan-search');if(s){s.value='';s.focus();}">
+            <button class="naadan-import-trigger" id="card-naadan-import" onclick="console.log('BTN CLICK');var m=document.getElementById('naadan-modal');console.log('modal el:',m,'class:',m&&m.className);if(m){m.classList.add('open');console.log('after open:',m.className,m.style.display,getComputedStyle(m).display);}">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               Import from Naadan Chords
             </button>

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dotwav-sheets-v5';
+const CACHE_NAME = 'dotwav-sheets-v6';
 const ASSETS = [
   './',
   './styles.css',
