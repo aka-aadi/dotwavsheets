@@ -387,12 +387,28 @@ body {
 /* ─── FOOTER ─── */
 #app-footer {
   height:var(--footer-height);
-  display:flex; align-items:center; justify-content:center; gap:8px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 16px;
   font-size:0.72rem; color:var(--text-muted);
   background:var(--bg-secondary); border-top:1px solid var(--border); flex-shrink:0;
 }
-.footer-dot { opacity:0.4 }
+.footer-brand { display:flex; align-items:center }
+.footer-logo {
+  font-size:0.78rem; font-weight:700; letter-spacing:-0.02em;
+  color:var(--text-primary);
+}
+.footer-logo span { color:var(--text-muted); font-weight:400 }
 #save-status { color:var(--accent-chord); font-weight:500 }
+.footer-naadan {
+  display:flex; align-items:center; gap:5px;
+  text-decoration:none; color:var(--text-muted);
+  transition:color 0.15s;
+}
+.footer-naadan:hover { color:var(--text-primary) }
+.footer-powered { font-size:0.68rem; opacity:0.65 }
+.naadan-favicon { border-radius:3px; opacity:0.85; flex-shrink:0 }
+.footer-naadan-name { font-size:0.75rem; font-weight:600; color:var(--text-secondary) }
+.footer-naadan:hover .footer-naadan-name { color:var(--text-primary) }
 
 /* ─── MODALS ─── */
 .modal-overlay {
