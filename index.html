@@ -57,7 +57,7 @@
         <!-- Songs View -->
         <div id="songs-view">
           <div class="songs-actions-bar">
-            <button class="naadan-import-trigger" id="card-naadan-import" onclick="window.__openNaadanModal && window.__openNaadanModal()">
+            <button class="naadan-import-trigger" id="card-naadan-import">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               Import from Naadan Chords
             </button>
@@ -478,6 +478,22 @@ That saved a wretch like me"></textarea>
 
   <div id="sidebar-overlay" class="sidebar-overlay"></div>
   <div class="toast-container" id="toast-container"></div>
-  <script src="app.js"></script>
+  <script src="app.js?v=20260628c"></script>
+  <script>
+    // Direct binding — independent of IIFE, works even if app.js is cached
+    (function() {
+      var btn = document.getElementById('card-naadan-import');
+      var modal = document.getElementById('naadan-modal');
+      if (!btn || !modal) return;
+      btn.onclick = function(e) {
+        e.stopPropagation();
+        if (window.__openNaadanModal) { window.__openNaadanModal(); return; }
+        // Fallback: open modal directly
+        var inp = document.getElementById('naadan-search');
+        modal.classList.add('open');
+        if (inp) { inp.value = ''; setTimeout(function(){ inp.focus(); }, 50); }
+      };
+    })();
+  </script>
 </body>
 </html>
