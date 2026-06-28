@@ -1079,6 +1079,12 @@
     el.editorScreen.classList.toggle('hidden', screen !== 'editor');
     el.setlistScreen.classList.toggle('hidden', screen !== 'setlist');
     el.performanceScreen.classList.toggle('hidden', screen !== 'performance');
+
+    // Footer: hide on performance, show elsewhere; save-status only in editor
+    const footer = document.getElementById('app-footer');
+    const saveStatus = document.getElementById('save-status');
+    if (footer) footer.classList.toggle('hidden', screen === 'performance');
+    if (saveStatus) saveStatus.classList.toggle('hidden', screen !== 'editor');
     
     if (screen === 'editor' || screen === 'setlist') {
       homeScrollPos = el.homeMain.scrollTop;

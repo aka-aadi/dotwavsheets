@@ -399,6 +399,7 @@ body {
 }
 .footer-logo span { color:var(--text-muted); font-weight:400 }
 #save-status { color:var(--accent-chord); font-weight:500 }
+.footer-save-status.hidden { display:none }
 .footer-naadan {
   display:flex; align-items:center; gap:5px;
   text-decoration:none; color:var(--text-muted);

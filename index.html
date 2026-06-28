@@ -407,18 +407,6 @@
     </aside>
   </main>
 
-  <footer id="app-footer">
-    <div class="footer-brand">
-      <span class="footer-logo">dotwav<span>project</span></span>
-    </div>
-    <span id="save-status">Auto-saved</span>
-    <a class="footer-naadan" href="https://naadanchords.com" target="_blank" rel="noopener">
-      <span class="footer-powered">powered by</span>
-      <img src="https://naadanchords.com/favicon.ico" width="14" height="14" alt="" class="naadan-favicon">
-      <span class="footer-naadan-name">Naadan Chords</span>
-    </a>
-  </footer>
-
   <!-- IMPORT MODAL -->
   <div class="modal-overlay" id="import-modal">
     <div class="modal">
@@ -472,6 +460,19 @@ That saved a wretch like me"></textarea>
       </div>
     </div>
   </div>
+
+  <!-- GLOBAL FOOTER (shown on home + editor, hidden on performance) -->
+  <footer id="app-footer">
+    <div class="footer-brand">
+      <span class="footer-logo">dotwav<span>project</span></span>
+    </div>
+    <span id="save-status" class="footer-save-status hidden">Auto-saved</span>
+    <a class="footer-naadan" href="https://naadanchords.com" target="_blank" rel="noopener">
+      <span class="footer-powered">powered by</span>
+      <img src="https://naadanchords.com/favicon.ico" width="14" height="14" alt="" class="naadan-favicon" onerror="this.replaceWith('♩')">
+      <span class="footer-naadan-name">Naadan Chords</span>
+    </a>
+  </footer>
 
   <div id="sidebar-overlay" class="sidebar-overlay"></div>
   <div class="toast-container" id="toast-container"></div>
