@@ -1903,6 +1903,7 @@ The [Em]hour I [D]first be[G]lieved`;
   let naadanSearchTimeout = null;
 
   function openNaadanModal() {
+    if (!el.naadanModal) return;
     el.naadanModal.classList.add('open');
     el.naadanSearch.value = '';
     el.naadanResults.innerHTML = `<div class="naadan-placeholder">
@@ -1911,6 +1912,8 @@ The [Em]hour I [D]first be[G]lieved`;
     </div>`;
     requestAnimationFrame(() => el.naadanSearch.focus());
   }
+  // Expose globally so the HTML onclick attribute can reach it
+  window.__openNaadanModal = openNaadanModal;
 
   function closeNaadanModal() {
     el.naadanModal.classList.remove('open');
@@ -2146,10 +2149,7 @@ The [Em]hour I [D]first be[G]lieved`;
     });
     el.cardCreate.addEventListener('click', () => newSheet());
 
-    // Naadan Chords import — delegated so it works regardless of render order
-    document.addEventListener('click', e => {
-      if (e.target.closest('#card-naadan-import')) openNaadanModal();
-    });
+    // Naadan Chords import — handled via onclick attribute in HTML (window.__openNaadanModal)
     if (el.naadanModal) {
       el.naadanModal.addEventListener('click', e => { if (e.target === el.naadanModal) closeNaadanModal(); });
       safeBind('#btn-naadan-close', 'click', closeNaadanModal);
