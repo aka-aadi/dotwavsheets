@@ -2167,7 +2167,6 @@ The [Em]hour I [D]first be[G]lieved`;
     el.homeTabSetlists.addEventListener('click', () => switchHomeTab('setlists'));
     safeBind('#card-create-setlist', 'click', createNewSetlist);
     safeBind('#btn-setlist-back', 'click', () => showScreen('home'));
-    safeBind('#btn-add-to-setlist', 'click', openAddSongModal);
     safeBind('#btn-add-song', 'click', openAddSongModal);
     safeBind('#btn-delete-setlist', 'click', deleteSetlist);
 
