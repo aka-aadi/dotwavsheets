@@ -478,41 +478,6 @@ That saved a wretch like me"></textarea>
 
   <div id="sidebar-overlay" class="sidebar-overlay"></div>
   <div class="toast-container" id="toast-container"></div>
-  <script src="app.js?v=20260628e"></script>
-  <script>
-    // Self-contained Naadan modal wiring â€” open + ALL close paths
-    (function() {
-      var btn   = document.getElementById('card-naadan-import');
-      var modal = document.getElementById('naadan-modal');
-      var inp   = document.getElementById('naadan-search');
-      var xBtn  = document.getElementById('btn-naadan-close');
-      if (!btn || !modal) return;
-
-      function openModal() {
-        if (window.__openNaadanModal) { window.__openNaadanModal(); return; }
-        modal.classList.add('open');
-        if (inp) { inp.value = ''; setTimeout(function(){ inp.focus(); }, 50); }
-      }
-      function closeModal() {
-        modal.classList.remove('open');
-      }
-
-      // Open
-      btn.onclick = function(e) { e.stopPropagation(); openModal(); };
-
-      // Close â€” X button
-      if (xBtn) xBtn.onclick = closeModal;
-
-      // Close â€” backdrop click
-      modal.addEventListener('click', function(e) {
-        if (e.target === modal) closeModal();
-      });
-
-      // Close â€” Escape key
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
-      });
-    })();
-  </script>
+  <script src="app.js?v=20260628f"></script>
 </body>
 </html>

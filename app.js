@@ -1010,7 +1010,8 @@
   }
 
   function newSheet() {
-    currentSongId = null; 
+    if (el.naadanModal) el.naadanModal.classList.remove('open');
+    currentSongId = null;
     song = { title: '', artist: '', key: 'C', keyMode: 'major', tempo: 120, capo: 0, transposeAmount: 0, lines: [] };
     el.title.value = ''; el.artist.value = ''; el.key.value = 'C'; el.keyMode.value = 'major'; el.tempo.value = 120; el.capo.value = 0;
     selectedLines.clear();
@@ -1522,6 +1523,7 @@
   }
 
   async function loadSong(id, data) {
+    if (el.naadanModal) el.naadanModal.classList.remove('open');
     currentSongId = id;
     song = data;
     restoreUi();
@@ -1914,8 +1916,6 @@ The [Em]hour I [D]first be[G]lieved`;
     requestAnimationFrame(() => el.naadanSearch.focus());
   }
   // Expose globally so the HTML onclick attribute can reach it
-  window.__openNaadanModal = openNaadanModal;
-
   function closeNaadanModal() {
     el.naadanModal.classList.remove('open');
     clearTimeout(naadanSearchTimeout);
@@ -2150,7 +2150,13 @@ The [Em]hour I [D]first be[G]lieved`;
     });
     el.cardCreate.addEventListener('click', () => newSheet());
 
-    // Naadan Chords import — handled via onclick attribute in HTML (window.__openNaadanModal)
+    // Naadan Chords import — home-screen button only
+    if (el.cardNaadan) {
+      el.cardNaadan.addEventListener('click', e => {
+        e.stopPropagation();
+        openNaadanModal();
+      });
+    }
     if (el.naadanModal) {
       el.naadanModal.addEventListener('click', e => { if (e.target === el.naadanModal) closeNaadanModal(); });
       safeBind('#btn-naadan-close', 'click', closeNaadanModal);
