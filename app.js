@@ -1513,35 +1513,37 @@
     renderEditor();
     showScreen('editor');
 
-    // Subscribe to real-time updates for THIS song
+    // Subscribe to real-time updates for THIS song (other-device changes only)
     if (window.songUnsub) window.songUnsub();
     if (db && id) {
       window.songUnsub = db.collection('songs').doc(id).onSnapshot(doc => {
-        if (doc.exists) {
-          const newData = doc.data();
-          // Update local song object and re-render if it changed from another device
-          // We check updatedAt to avoid loops if we just saved
-          if (JSON.stringify(newData.lines) !== JSON.stringify(song.lines) || 
-              newData.transposeAmount !== song.transposeAmount ||
-              newData.title !== song.title || newData.artist !== song.artist) {
-            song = { id: doc.id, ...newData };
-            restoreUi();
-            renderEditor();
-            if (activeTab === 'preview') renderPreview();
-          }
+        // Skip snapshots triggered by our own writes (Firestore echoes them back).
+        // We allow remote changes through only after 5s of local write silence.
+        if (Date.now() - lastSyncedAt < 5000) return;
+        if (!doc.exists) return;
+        const newData = doc.data();
+        const changed =
+          JSON.stringify(newData.lines) !== JSON.stringify(song.lines) ||
+          (newData.transposeAmount ?? 0) !== (song.transposeAmount ?? 0) ||
+          newData.title !== song.title ||
+          newData.artist !== song.artist;
+        if (changed) {
+          song = { id: doc.id, ...newData };
+          restoreUi();
+          renderEditor();
+          if (activeTab === 'preview') renderPreview();
         }
       }, err => console.error("Song sync error:", err));
     }
   }
 
+  let lastSyncedAt = 0; // timestamp of our last successful cloud write
+
   async function syncToCloud() {
-    if (!db) { save(); return; }
-    
-    // Prevent syncing empty "Untitled" songs or drafts without content
+    if (!db) return; // localStorage already saved in save() — no need to call save() here
     if (!hasContent()) {
       el.saveStatus.textContent = 'Local Draft';
-      save();
-      return;
+      return; // do NOT call save() — that re-schedules debouncedSync → infinite loop
     }
 
     el.saveStatus.textContent = 'Syncing...';
@@ -1552,11 +1554,8 @@
       };
 
       if (currentSongId) {
-        // If we have an ID, we update the existing document
         await db.collection('songs').doc(currentSongId).set(payload, { merge: true });
       } else {
-        // Before creating a NEW document, check if this IDENTICAL song exists (deduplication)
-        // This handles the "other device" sync issue where a local song might already be in the cloud
         const existing = await db.collection('songs')
           .where('title', '==', song.title)
           .where('artist', '==', song.artist)
@@ -1570,13 +1569,15 @@
           const docRef = await db.collection('songs').add(payload);
           currentSongId = docRef.id;
         }
-        save(); // Save the resolved ID locally
+        // Persist the resolved ID to localStorage (no cloud sync re-schedule)
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ song, activeTab, sidebarOpen, currentSongId })); } catch (_) {}
       }
+      lastSyncedAt = Date.now();
       el.saveStatus.textContent = 'Saved to Cloud';
     } catch (e) {
       console.error("Sync error:", e);
       el.saveStatus.textContent = 'Local Only';
-      save(); 
+      // do NOT call save() here — that re-schedules debouncedSync → retry storm
     }
   }
 
@@ -1588,7 +1589,7 @@
     };
   }
 
-  const debouncedSync = debounce(syncToCloud, 1000);
+  const debouncedSync = debounce(syncToCloud, 4000); // 4s — no need to hammer Firestore
 
   // ═══════════════════════════════════════════════════════
   // HELPERS
