@@ -194,6 +194,12 @@
     el.btnCloseAddNote = $('#btn-close-add-note');
     el.ptrIndicator = $('#ptr-indicator');
     el.btnInstallHeader = $('#btn-install-header');
+
+    // Naadan Chords import
+    el.cardNaadan = $('#card-naadan-import');
+    el.naadanModal = $('#naadan-modal');
+    el.naadanSearch = $('#naadan-search');
+    el.naadanResults = $('#naadan-results');
   }
 
   // ═══════════════════════════════════════════════════════
@@ -350,18 +356,20 @@
       renderEditor();
     };
 
+    // Expose a cancel handle so the global Escape handler can reach it
+    input._cancelEdit = () => finish(false);
+
     input.addEventListener('blur', () => finish(true));
     input.addEventListener('keydown', ev => {
       if (ev.key === 'Enter') {
         ev.preventDefault();
         const text = input.value;
         line.text = text;
-        finishing = true; // prevent blur from double-saving
+        finishing = true;
         song.lines.splice(idx + 1, 0, { type: 'lyric', text: '', chords: [] });
         cursorIdx = idx + 1;
         save();
         renderEditor();
-        // Immediately focus the new empty line
         requestAnimationFrame(() => {
           const nextLyric = document.querySelector(`.lyric-text[data-idx="${idx + 1}"]`);
           if (nextLyric) nextLyric.dispatchEvent(new MouseEvent('click', { bubbles: true }));
@@ -404,6 +412,7 @@
           });
         }
       } else if (ev.key === 'Escape') {
+        ev.preventDefault();
         finish(false);
       }
     });
@@ -438,14 +447,13 @@
       }
       renderEditor();
     };
+    input._cancelEdit = () => finish(false);
+
     input.addEventListener('blur', () => finish(true));
     input.addEventListener('keydown', ev => {
       if (ev.key === 'Enter') { ev.preventDefault(); finish(true); }
-      if (ev.key === 'Escape') finish(false);
-      if (ev.key === 'Tab') {
-        ev.preventDefault();
-        finish(true);
-      }
+      if (ev.key === 'Escape') { ev.preventDefault(); finish(false); }
+      if (ev.key === 'Tab') { ev.preventDefault(); finish(true); }
     });
   }
 
@@ -1882,6 +1890,179 @@ The [Em]hour I [D]first be[G]lieved`;
     }
   }
 
+  // ═══════════════════════════════════════════════════════
+  // NAADAN CHORDS IMPORT
+  // ═══════════════════════════════════════════════════════
+  const NAADAN_API = 'https://api.naadanchords.com/posts';
+  let naadanSearchTimeout = null;
+
+  function openNaadanModal() {
+    el.naadanModal.classList.add('open');
+    el.naadanSearch.value = '';
+    el.naadanResults.innerHTML = `<div class="naadan-placeholder">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Search for a song to import</span>
+    </div>`;
+    requestAnimationFrame(() => el.naadanSearch.focus());
+  }
+
+  function closeNaadanModal() {
+    el.naadanModal.classList.remove('open');
+    clearTimeout(naadanSearchTimeout);
+  }
+
+  function isChordToken(t) {
+    return /^[A-G][#b]?(m(aj(7|9|11|13)?)?|min|dim[57]?|aug|sus[24]?|add(2|4|9|11|13)?|M)?(\d+)?(\/[A-G][#b]?)?$/.test(t);
+  }
+
+  function isChordLine(line) {
+    const trimmed = line.trim();
+    if (!trimmed) return false;
+    const tokens = trimmed.split(/\s+/);
+    return tokens.length > 0 && tokens.every(t => isChordToken(t));
+  }
+
+  function parseNaadanContent(content) {
+    const clean = content
+      .replace(/\{start_heading\}.*?\{end_heading\}/gs, '')
+      .replace(/\{start_italic\}/g, '').replace(/\{end_italic\}/g, '')
+      .replace(/\{start_strumming\}.*?\{end_strumming\}/gs, '')
+      .replace(/\{[^}]+\}/g, '');
+
+    const rawLines = clean.split('\n');
+    const lines = [];
+    let i = 0;
+
+    while (i < rawLines.length) {
+      const line = rawLines[i];
+      if (!line.trim()) { i++; continue; }
+
+      if (isChordLine(line)) {
+        const next = rawLines[i + 1];
+        const hasLyric = next !== undefined && next.trim() !== '' && !isChordLine(next);
+        const lyricText = hasLyric ? next.trim() : '';
+
+        // Extract chord positions from the chord line (character indices)
+        const chords = [];
+        const re = /(\S+)/g;
+        let m;
+        while ((m = re.exec(line)) !== null) {
+          if (isChordToken(m[1])) chords.push({ name: m[1], pos: m.index });
+        }
+        lines.push({ type: 'lyric', text: lyricText, chords });
+        i += hasLyric ? 2 : 1;
+      } else {
+        lines.push({ type: 'lyric', text: line.trim(), chords: [] });
+        i++;
+      }
+    }
+
+    return lines;
+  }
+
+  function renderNaadanResults(items) {
+    if (!items || items.length === 0) {
+      el.naadanResults.innerHTML = `<div class="naadan-empty">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>No songs found</span>
+      </div>`;
+      return;
+    }
+
+    const langClass = { MALAYALAM: '', TAMIL: 'lang-tamil', HINDI: 'lang-hindi', TELUGU: 'lang-telugu' };
+    el.naadanResults.innerHTML = items.map(item => {
+      const songName = item.song || item.title.split('  -  ')[0].trim();
+      const album = item.album || '';
+      const lang = item.category || '';
+      const lc = langClass[lang] || '';
+      const artistMeta = item.singers ? esc(item.singers) : '';
+      return `<div class="naadan-result-item" data-id="${esc(item.postId)}" data-title="${esc(songName)}">
+        <div class="naadan-result-info">
+          <span class="naadan-result-title">${esc(songName)}</span>
+          <div class="naadan-result-meta">
+            ${lang ? `<span class="naadan-badge ${lc}">${esc(lang)}</span>` : ''}
+            ${album ? `<span>${esc(album)}</span>` : ''}
+            ${artistMeta ? `<span>· ${artistMeta}</span>` : ''}
+          </div>
+        </div>
+        <svg class="naadan-import-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>`;
+    }).join('');
+
+    el.naadanResults.querySelectorAll('.naadan-result-item').forEach(row => {
+      row.addEventListener('click', () => importNaadanSong(row.dataset.id, row.dataset.title));
+    });
+  }
+
+  async function searchNaadan(query) {
+    query = query.trim();
+    if (!query) {
+      el.naadanResults.innerHTML = `<div class="naadan-placeholder">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Search for a song to import</span>
+      </div>`;
+      return;
+    }
+
+    el.naadanResults.innerHTML = `<div class="naadan-loading">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+      <span>Searching…</span>
+    </div>`;
+
+    try {
+      const resp = await fetch(`${NAADAN_API}?search=${encodeURIComponent(query)}`);
+      if (!resp.ok) throw new Error(resp.statusText);
+      const data = await resp.json();
+      renderNaadanResults(data.Items || []);
+    } catch (e) {
+      el.naadanResults.innerHTML = `<div class="naadan-empty"><span>Search failed — check your connection</span></div>`;
+    }
+  }
+
+  async function importNaadanSong(postId, titleHint) {
+    closeNaadanModal();
+    toast('Importing song…', 'info');
+
+    try {
+      const resp = await fetch(`${NAADAN_API}/${postId}`);
+      if (!resp.ok) throw new Error(resp.statusText);
+      const post = await resp.json();
+
+      const title = post.song || (post.title || '').split('  -  ')[0].trim() || titleHint;
+      const lines = parseNaadanContent(post.content || '');
+
+      currentSongId = null;
+      song = {
+        title,
+        artist: post.singers || '',
+        key: post.scale || 'C',
+        keyMode: 'major',
+        tempo: parseInt(post.tempo) || 120,
+        capo: parseInt(post.capo) || 0,
+        transposeAmount: 0,
+        preferSharps: false,
+        lines
+      };
+
+      if (el.title) el.title.value = song.title;
+      if (el.artist) el.artist.value = song.artist;
+      if (el.key) el.key.value = song.key;
+      if (el.keyMode) el.keyMode.value = song.keyMode;
+      if (el.tempo) el.tempo.value = song.tempo;
+      if (el.capo) el.capo.value = song.capo;
+      selectedLines.clear();
+      updateTransposeDisplay();
+      renderEditor();
+      showScreen('editor');
+      save();
+      syncToCloud();
+      toast(`"${title}" imported!`, 'success');
+    } catch (e) {
+      console.error('Naadan import failed', e);
+      toast('Import failed — please try again', 'error');
+    }
+  }
+
   function bindEvents() {
     // Editor clicks (delegated)
     el.editorContent.addEventListener('click', e => {
@@ -1958,6 +2139,20 @@ The [Em]hour I [D]first be[G]lieved`;
       showScreen('home');
     });
     el.cardCreate.addEventListener('click', () => newSheet());
+
+    // Naadan Chords import
+    if (el.cardNaadan) el.cardNaadan.addEventListener('click', openNaadanModal);
+    if (el.naadanModal) {
+      el.naadanModal.addEventListener('click', e => { if (e.target === el.naadanModal) closeNaadanModal(); });
+      safeBind('#btn-naadan-close', 'click', closeNaadanModal);
+      el.naadanSearch.addEventListener('input', e => {
+        clearTimeout(naadanSearchTimeout);
+        naadanSearchTimeout = setTimeout(() => searchNaadan(e.target.value), 350);
+      });
+      el.naadanSearch.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeNaadanModal();
+      });
+    }
 
     // Setlist Events
     el.homeTabSongs.addEventListener('click', () => switchHomeTab('songs'));
@@ -2124,6 +2319,11 @@ The [Em]hour I [D]first be[G]lieved`;
           && !['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) {
         e.preventDefault();
         addLine();
+      }
+      // Escape dismisses any open inline edit
+      if (e.key === 'Escape' && currentScreen === 'editor') {
+        const active = document.querySelector('.lyric-edit-input, .section-edit-input');
+        if (active && active._cancelEdit) { e.preventDefault(); active._cancelEdit(); }
       }
     });
 

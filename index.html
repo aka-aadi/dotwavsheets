@@ -65,6 +65,14 @@
               <h3>Create New</h3>
               <p>Start a new chord sheet</p>
             </div>
+            <!-- Import from Naadan Chords Card -->
+            <div class="song-card create-card naadan-card" id="card-naadan-import">
+              <div class="create-icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </div>
+              <h3>Import Song</h3>
+              <p>Search Naadan Chords</p>
+            </div>
             <!-- Songs will be injected here -->
           </div>
         </div>
@@ -438,6 +446,28 @@ That saved a wretch like me"></textarea>
       </div>
     </div>
   </div> <!-- #editor-screen -->
+
+  <!-- NAADAN CHORDS IMPORT MODAL -->
+  <div class="modal-overlay" id="naadan-modal">
+    <div class="modal modal-wide">
+      <div class="modal-header">
+        <div>
+          <h2>Import from Naadan Chords</h2>
+          <p class="modal-subtitle">naadanchords.com</p>
+        </div>
+        <button class="modal-close" id="btn-naadan-close">&times;</button>
+      </div>
+      <div class="modal-body naadan-modal-body">
+        <input type="text" id="naadan-search" class="modal-search" placeholder="Search songs, artists, albums..." autocomplete="off" spellcheck="false">
+        <div id="naadan-results" class="naadan-results">
+          <div class="naadan-placeholder">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <span>Search for a song to import</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div id="sidebar-overlay" class="sidebar-overlay"></div>
   <div class="toast-container" id="toast-container"></div>
